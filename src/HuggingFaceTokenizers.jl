@@ -1,5 +1,11 @@
 module HuggingFaceTokenizers
 
-# Write your package code here.
+using PythonCall
+
+const tokenizers = Ref{Py}()
+
+function __init__()
+    tokenizers[] = pyimport("tokenizers")
+end
 
 end

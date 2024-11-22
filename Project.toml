@@ -3,8 +3,12 @@ uuid = "a6888d44-1185-43bb-bd0f-7806f9976d18"
 authors = ["AntonOresten <anton.oresten42@gmail.com> and contributors"]
 version = "1.0.0-DEV"
 
+[deps]
+PythonCall = "6099a3de-0909-46bc-b1f4-468b9a2dfc0d"
+
 [compat]
-julia = "1.6.7"
+PythonCall = "0.9.23"
+julia = "1"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"

@@ -1,3 +1,10 @@
+"""
+    HuggingFaceTokenizers
+
+A Julia wrapper around HuggingFace's Tokenizers Python library.
+
+See https://huggingface.co/docs/tokenizers/en/index for official documentation.
+"""
 module HuggingFaceTokenizers
 
 using PythonCall

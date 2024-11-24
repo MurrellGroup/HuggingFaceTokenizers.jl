@@ -24,6 +24,9 @@ using HuggingFaceTokenizers
 # Load a pre-trained tokenizer
 tokenizer = from_pretrained(Tokenizer, "bert-base-uncased")
 
+# Alternatively specify revision and auth token
+tokenizer = from_pretrained(Tokenizer, "bert-base-uncased", "main", nothing)
+
 # Or load from a file
 tokenizer = from_file(Tokenizer, "path/to/tokenizer.json")
 ```

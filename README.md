@@ -10,7 +10,7 @@ Rudimentary Julia bindings for [🤗 Tokenizers](https://github.com/huggingface/
 From the Julia REPL, enter Pkg mode with `]` and add the package using the URL:
 
 ```
-add https://github.com/MurrellGroup/HuggingFaceTokenizers.jl
+add HuggingFaceTokenizers
 ```
 
 ## Usage

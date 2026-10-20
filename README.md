@@ -67,6 +67,25 @@ ids_batch = [result.ids for result in batch_results]
 decoded_texts = decode_batch(tokenizer, ids_batch)
 ```
 
+#### Fast Batch Encoding of IDs
+
+To tokenize a large corpus, use `encode_batch_ids`, which returns only the token IDs and is much faster and lighter on memory than `encode_batch`:
+
+```julia
+ids_batch = encode_batch_ids(tokenizer, texts; T=UInt16)  # one view per text
+all_ids = parent(ids_batch[1])                            # the IDs of all texts, concatenated
+```
+
+### Python Interop
+
+A `Tokenizer` can be passed directly to Python functions called through PythonCall, and `Py(tokenizer)` returns the underlying Python object:
+
+```julia
+using PythonCall
+get_ids = pyeval("lambda tokenizer, text: tokenizer.encode(text).ids", Main)
+get_ids(tokenizer, "Hello, how are you?")
+```
+
 ### Saving a Tokenizer
 
 ```julia

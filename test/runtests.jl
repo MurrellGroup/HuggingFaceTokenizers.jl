@@ -46,7 +46,36 @@ using Test
         @test length(decoded_texts) == length(texts)
         @test all(!isempty, decoded_texts)
     end
-    
+
+    @testset "encode_batch_ids" begin
+        tokenizer = from_pretrained(Tokenizer, "bert-base-uncased")
+        texts = ["Hello, how are you?", "", "I'm doing great!"]
+
+        ids_batch = encode_batch_ids(tokenizer, texts)
+        @test ids_batch isa Vector{<:SubArray{UInt32}}
+        @test ids_batch == [result.ids for result in encode_batch(tokenizer, texts)]
+        @test parent(ids_batch[1]) == reduce(vcat, ids_batch)
+        @test all(ids -> parent(ids) === parent(ids_batch[1]), ids_batch)
+
+        @test encode_batch_ids(tokenizer, texts; T=UInt16) isa Vector{<:SubArray{UInt16}}
+        @test encode_batch_ids(tokenizer, texts; T=Int) == ids_batch
+        @test encode_batch_ids(tokenizer, texts; add_special_tokens=false) ==
+            [result.ids for result in encode_batch(tokenizer, texts; add_special_tokens=false)]
+        @test isempty(encode_batch_ids(tokenizer, String[]))
+        @test_throws HuggingFaceTokenizers.PythonCall.PyException encode_batch_ids(tokenizer, texts; T=Int8)
+
+        @test decode_batch(tokenizer, ids_batch) == decode_batch(tokenizer, [result.ids for result in encode_batch(tokenizer, texts)])
+    end
+
+    @testset "Python interop" begin
+        PythonCall = HuggingFaceTokenizers.PythonCall
+        tokenizer = from_pretrained(Tokenizer, "bert-base-uncased")
+        @test PythonCall.ispy(tokenizer)
+        @test PythonCall.Py(tokenizer) === tokenizer.py_tokenizer
+        f = PythonCall.pyeval("lambda tokenizer, text: tokenizer.encode(text).ids", Main)
+        @test PythonCall.pyconvert(Vector{Int}, f(tokenizer, "Hello")) == encode(tokenizer, "Hello").ids
+    end
+
     @testset "File Operations" begin
         tokenizer = from_pretrained(Tokenizer, "bert-base-uncased")
         

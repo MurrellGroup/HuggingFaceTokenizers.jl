@@ -1,2 +1,2 @@
 [deps]
-tokenizers = ""
+tokenizers = ">=0.20"
